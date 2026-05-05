@@ -1,129 +1,203 @@
 # ============================================
-# APP.PY — Python Flask Server
-# Wraps your Phase 3 LLM in a REST API
+# APP.PY — Python Flask Server (PyTorch Version)
+# Full model classes included — no imports needed
 # Run with: python app.py
 # Listens on: http://localhost:5000
 # ============================================
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
 import json
 import os
-import sys
-
-# Add parent directory so we can import Phase 3 files
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
-from tokenizer import Tokenizer
-from model import TinyLLM
-from train import load_weights
 
 app = Flask(__name__)
-CORS(app)  # allows Node.js server to call this server
-
-# ============================================
-# LOAD MODEL ON STARTUP (do this once only)
-# ============================================
-print("Loading model...")
-
-with open("data/stocks.txt", "r") as f:
-    text = f.read()
-
-tokenizer = Tokenizer(text)
-
-model = TinyLLM(
-    vocab_size = tokenizer.vocab_size,
-    embed_size = 32,
-    head_size  = 16,
-    n_blocks   = 2,
-    block_size = 32
-)
-
-try:
-    load_weights(model)
-    print("Weights loaded successfully!")
-except FileNotFoundError:
-    print("No weights.json found — using random weights.")
-    print("Run train.py first for better results.")
-
-print("Model ready!\n")
+CORS(app)
 
 
 # ============================================
-# HELPER — Generate text from the LLM
+# STEP 1 — Load vocab from vocab.json
+# (created by train.py)
 # ============================================
-def generate_response(seed_text, n_chars=120, temperature=1.0):
+with open("vocab.json", "r") as f:
+    vocab_data = json.load(f)
+
+vocab      = vocab_data["vocab"]
+vocab_size = vocab_data["vocab_size"]
+c2i        = { ch: i for i, ch in enumerate(vocab) }
+i2c        = { i: ch for i, ch in enumerate(vocab) }
+
+def encode(s): return [c2i.get(c, 0) for c in s]
+def decode(l): return ''.join([i2c[i] for i in l])
+
+print(f"Vocab loaded: {vocab_size} characters")
+
+
+# ============================================
+# STEP 2 — Model hyperparameters
+# Must match EXACTLY what you used in train.py
+# ============================================
+BLOCK_SIZE = 64
+EMBED_SIZE = 64
+HEAD_SIZE  = 32
+N_HEADS    = 4
+N_LAYERS   = 3
+DROPOUT    = 0.1
+
+
+# ============================================
+# STEP 3 — Model classes
+# Exact same classes as train.py
+# ============================================
+
+class Head(nn.Module):
+    def __init__(self, head_size):
+        super().__init__()
+        self.key   = nn.Linear(EMBED_SIZE, head_size, bias=False)
+        self.query = nn.Linear(EMBED_SIZE, head_size, bias=False)
+        self.value = nn.Linear(EMBED_SIZE, head_size, bias=False)
+        self.register_buffer('tril', torch.tril(torch.ones(BLOCK_SIZE, BLOCK_SIZE)))
+        self.dropout = nn.Dropout(DROPOUT)
+
+    def forward(self, x):
+        B, T, C = x.shape
+        k   = self.key(x)
+        q   = self.query(x)
+        wei = q @ k.transpose(-2, -1) * (C ** -0.5)
+        wei = wei.masked_fill(self.tril[:T, :T] == 0, float('-inf'))
+        wei = F.softmax(wei, dim=-1)
+        wei = self.dropout(wei)
+        v   = self.value(x)
+        return wei @ v
+
+
+class MultiHead(nn.Module):
+    def __init__(self, n_heads, head_size):
+        super().__init__()
+        self.heads = nn.ModuleList([Head(head_size) for _ in range(n_heads)])
+        self.proj  = nn.Linear(n_heads * head_size, EMBED_SIZE)
+        self.drop  = nn.Dropout(DROPOUT)
+
+    def forward(self, x):
+        out = torch.cat([h(x) for h in self.heads], dim=-1)
+        return self.drop(self.proj(out))
+
+
+class FeedForward(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(EMBED_SIZE, 4 * EMBED_SIZE),
+            nn.ReLU(),
+            nn.Linear(4 * EMBED_SIZE, EMBED_SIZE),
+            nn.Dropout(DROPOUT)
+        )
+
+    def forward(self, x):
+        return self.net(x)
+
+
+class Block(nn.Module):
+    def __init__(self):
+        super().__init__()
+        head_size = EMBED_SIZE // N_HEADS
+        self.sa   = MultiHead(N_HEADS, head_size)
+        self.ff   = FeedForward()
+        self.ln1  = nn.LayerNorm(EMBED_SIZE)
+        self.ln2  = nn.LayerNorm(EMBED_SIZE)
+
+    def forward(self, x):
+        x = x + self.sa(self.ln1(x))
+        x = x + self.ff(self.ln2(x))
+        return x
+
+
+class TinyLLM(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.tok_emb = nn.Embedding(vocab_size, EMBED_SIZE)
+        self.pos_emb = nn.Embedding(BLOCK_SIZE, EMBED_SIZE)
+        self.blocks  = nn.Sequential(*[Block() for _ in range(N_LAYERS)])
+        self.ln      = nn.LayerNorm(EMBED_SIZE)
+        self.head    = nn.Linear(EMBED_SIZE, vocab_size)
+
+    def forward(self, idx, targets=None):
+        B, T   = idx.shape
+        tok    = self.tok_emb(idx)
+        pos    = self.pos_emb(torch.arange(T))
+        x      = self.blocks(tok + pos)
+        x      = self.ln(x)
+        logits = self.head(x)
+
+        loss = None
+        if targets is not None:
+            B, T, C = logits.shape
+            loss = F.cross_entropy(logits.view(B * T, C), targets.view(B * T))
+
+        return logits, loss
+
+    def generate(self, idx, n_chars, temperature=1.0):
+        for _ in range(n_chars):
+            idx_crop  = idx[:, -BLOCK_SIZE:]
+            logits, _ = self(idx_crop)
+            logits    = logits[:, -1, :] / temperature
+            probs     = F.softmax(logits, dim=-1)
+            next_idx  = torch.multinomial(probs, num_samples=1)
+            idx       = torch.cat((idx, next_idx), dim=1)
+        return idx
+
+
+# ============================================
+# STEP 4 — Load trained weights
+# ============================================
+model = TinyLLM()
+model.load_state_dict(torch.load("weights_torch.pt", map_location='cpu'))
+model.eval()   # puts model in inference mode (disables dropout)
+print("PyTorch model loaded successfully!")
+
+
+# ============================================
+# STEP 5 — Helper: generate a response
+# ============================================
+def generate_response(seed_text, n_chars=150, temperature=1.0):
     """
-    Takes a user message as seed text and generates a response.
-
-    seed_text   = the user's message
-    n_chars     = how many characters to generate
-    temperature = randomness (0.5 = focused, 1.5 = creative)
+    Takes seed text, runs the model, returns generated continuation.
     """
-    import numpy as np
-
-    # Only use characters the model knows
-    # Filter out unknown characters from the seed
-    known_chars = set(tokenizer.vocab)
-    safe_seed = ''.join(c for c in seed_text if c in known_chars)
-
-    # Fallback if seed has no known characters
+    # Filter to known characters only
+    safe_seed = ''.join(c for c in seed_text if c in c2i)
     if not safe_seed:
         safe_seed = "Stock"
 
-    token_ids = tokenizer.encode(safe_seed)
-    generated = safe_seed
+    # Encode seed to token IDs
+    token_ids = encode(safe_seed)
+    idx       = torch.tensor([token_ids], dtype=torch.long)
 
-    for _ in range(n_chars):
-        # Use last block_size tokens as context
-        context = token_ids[-model.block_size:]
+    # Generate with no gradient tracking (faster, less memory)
+    with torch.no_grad():
+        output = model.generate(idx, n_chars=n_chars, temperature=temperature)
 
-        # Get probability distribution for next character
-        probs = model.forward(context)
-
-        # Apply temperature
-        if temperature != 1.0:
-            probs = np.power(probs, 1.0 / temperature)
-            probs = probs / probs.sum()
-
-        # Sample next character
-        next_token = np.random.choice(len(probs), p=probs)
-        next_char  = tokenizer.decode([next_token])
-
-        token_ids.append(next_token)
-        generated += next_char
-
-    # Return only the generated part (not the seed)
-    return generated[len(safe_seed):]
+    # Decode only the NEW characters (skip the seed)
+    generated_ids = output[0].tolist()[len(token_ids):]
+    return decode(generated_ids)
 
 
 # ============================================
-# ROUTE — Health check
+# ROUTES
 # ============================================
+
 @app.route('/health', methods=['GET'])
 def health():
-    """
-    Simple endpoint to confirm the server is running.
-    Browser or Node.js can call: GET http://localhost:5000/health
-    """
     return jsonify({
-        "status": "ok",
-        "vocab_size": tokenizer.vocab_size,
-        "model": "TinyLLM Phase 3"
+        "status":     "ok",
+        "vocab_size": vocab_size,
+        "model":      "TinyLLM PyTorch"
     })
 
 
-# ============================================
-# ROUTE — Generate a response
-# ============================================
 @app.route('/generate', methods=['POST'])
 def generate():
-    """
-    Main endpoint. Receives a message and returns a generated response.
-
-    Request body:  { "message": "What is a stock?", "temperature": 1.0 }
-    Response body: { "response": "...", "seed": "..." }
-    """
     data = request.get_json()
 
     if not data or 'message' not in data:
@@ -131,30 +205,23 @@ def generate():
 
     message     = data.get('message', '')
     temperature = float(data.get('temperature', 1.0))
-    n_chars     = int(data.get('n_chars', 120))
+    n_chars     = int(data.get('n_chars', 150))
 
-    print(f"Received message: '{message}'")
+    print(f"Received: '{message}'")
 
-    response = generate_response(
-        seed_text   = message,
-        n_chars     = n_chars,
-        temperature = temperature
-    )
+    response = generate_response(message, n_chars=n_chars, temperature=temperature)
 
-    print(f"Generated: '{response[:50]}...'")
+    print(f"Generated: '{response[:60]}...'")
 
     return jsonify({
         "response": response,
-        "seed": message
+        "seed":     message
     })
 
 
 # ============================================
-# START SERVER
+# START
 # ============================================
 if __name__ == '__main__':
-    print("Starting Flask LLM server on http://localhost:5000")
-    print("Endpoints:")
-    print("  GET  /health    — check if server is running")
-    print("  POST /generate  — generate text from the LLM\n")
+    print("\nFlask LLM server running at http://localhost:5000\n")
     app.run(host='0.0.0.0', port=5000, debug=False)
