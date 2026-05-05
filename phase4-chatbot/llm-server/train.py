@@ -186,7 +186,7 @@ if __name__ == "__main__":
     )
 
     # Training settings
-    n_steps      = 50          # number of training steps
+    n_steps      = 2000       # number of training steps
                                # (increase to 500+ for better results, but slower)
     block_size   = 16          # characters per training example
     learning_rate = 0.05       # how big each weight update is

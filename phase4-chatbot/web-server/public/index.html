@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock AI — Portfolio Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="header-left">
+            <div class="logo-mark"></div>
+            <div>
+                <div class="logo-text">STOCK<span>AI</span></div>
+                <div class="logo-sub">Portfolio Intelligence</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="status-dot" id="status-dot"></div>
+            <span class="status-text" id="status-text">Connecting...</span>
+            <div class="temp-control">
+                <span class="temp-label">TEMP</span>
+                <input type="range" id="temp-slider" min="1" max="20" value="10" title="Temperature">
+                <span class="temp-val" id="temp-val">1.0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- TICKER TAPE -->
+    <div class="ticker-wrap">
+        <div class="ticker">
+            <span>AAPL +2.3%</span><span class="sep">◆</span>
+            <span>MSFT +1.1%</span><span class="sep">◆</span>
+            <span>TSLA -0.8%</span><span class="sep">◆</span>
+            <span>NVDA +4.2%</span><span class="sep">◆</span>
+            <span>AMZN +0.5%</span><span class="sep">◆</span>
+            <span>GOOGL +1.7%</span><span class="sep">◆</span>
+            <span>META +2.9%</span><span class="sep">◆</span>
+            <span>BRK.B -0.3%</span><span class="sep">◆</span>
+            <span>JPM +0.6%</span><span class="sep">◆</span>
+            <span>AAPL +2.3%</span><span class="sep">◆</span>
+            <span>MSFT +1.1%</span><span class="sep">◆</span>
+            <span>TSLA -0.8%</span><span class="sep">◆</span>
+            <span>NVDA +4.2%</span><span class="sep">◆</span>
+            <span>AMZN +0.5%</span><span class="sep">◆</span>
+            <span>GOOGL +1.7%</span><span class="sep">◆</span>
+        </div>
+    </div>
+
+    <!-- CHAT AREA -->
+    <main>
+        <div id="chat-window">
+            <!-- Welcome message -->
+            <div class="msg-row bot-row">
+                <div class="avatar bot-avatar">AI</div>
+                <div class="bubble bot-bubble">
+                    <div class="bubble-header">StockAI <span class="bubble-time" id="welcome-time"></span></div>
+                    <div class="bubble-body">
+                        Hello. I am your portfolio intelligence assistant, trained on stock market data.<br><br>
+                        Ask me about <strong>market trends</strong>, <strong>investment concepts</strong>, or
+                        <strong>portfolio strategies</strong>.
+                        I will generate a response based on my training.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- SUGGESTED PROMPTS -->
+    <div class="suggestions" id="suggestions">
+        <button class="suggest-btn" onclick="usePrompt('Stock prices rose')">Stock prices rose</button>
+        <button class="suggest-btn" onclick="usePrompt('The market today')">The market today</button>
+        <button class="suggest-btn" onclick="usePrompt('Investors are watching')">Investors are watching</button>
+        <button class="suggest-btn" onclick="usePrompt('Earnings season')">Earnings season</button>
+    </div>
+
+    <!-- INPUT BAR -->
+    <div class="input-bar">
+        <div class="input-wrap">
+            <textarea id="user-input" placeholder="Ask about stocks, markets, or your portfolio..." rows="1"
+                maxlength="200"></textarea>
+            <button id="send-btn" onclick="sendMessage()">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M2 8L14 8M14 8L9 3M14 8L9 13" stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+        </div>
+        <div class="input-meta">
+            <span id="char-count">0 / 200</span>
+            <span>Powered by TinyLLM — Phase 3 Transformer</span>
+        </div>
+    </div>
+
+    <script src="chat.js"></script>
+</body>
+
+</html>
