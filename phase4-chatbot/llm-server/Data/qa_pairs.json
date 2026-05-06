@@ -1,0 +1,386 @@
+[
+    {
+        "question": "What is a stock",
+        "answer": "A stock represents ownership in a company. When you buy a stock, you become a shareholder and own a small piece of that business. If the company grows and becomes more valuable, your stock increases in value. Companies issue stocks to raise money for expansion, research, or paying off debt."
+    },
+    {
+        "question": "What is a share",
+        "answer": "A share is a single unit of ownership in a company. If a company has 1 million shares and you own 10,000, you own 1% of that company. Shares can be bought and sold on stock exchanges like the NYSE or NASDAQ."
+    },
+    {
+        "question": "What is the stock market",
+        "answer": "The stock market is a marketplace where buyers and sellers trade shares of publicly listed companies. Major stock markets include the New York Stock Exchange (NYSE) and NASDAQ. Stock markets allow companies to raise capital and give investors a way to grow their wealth."
+    },
+    {
+        "question": "What is a dividend",
+        "answer": "A dividend is a payment a company makes to its shareholders, usually from its profits. Dividends are typically paid quarterly. For example, if a company pays a $1 annual dividend and you own 100 shares, you receive $100 per year. Not all companies pay dividends — growth companies often reinvest profits instead."
+    },
+    {
+        "question": "What is a portfolio",
+        "answer": "A portfolio is your collection of investments. It can include stocks, bonds, ETFs, mutual funds, real estate, and cash. A well-diversified portfolio spreads risk across different asset classes and sectors so that losses in one area can be offset by gains in another."
+    },
+    {
+        "question": "What is diversification",
+        "answer": "Diversification means spreading your investments across different assets, sectors, and geographies to reduce risk. The idea is that when one investment falls in value, others may rise or hold steady. A diversified portfolio might include stocks, bonds, real estate, and international assets."
+    },
+    {
+        "question": "What is a bull market",
+        "answer": "A bull market is a period when stock prices are rising, typically defined as a 20% or more increase from recent lows. Bull markets are driven by strong economic growth, low unemployment, and investor optimism. The longest bull market in US history ran from 2009 to 2020."
+    },
+    {
+        "question": "What is a bear market",
+        "answer": "A bear market is a period when stock prices fall 20% or more from recent highs. Bear markets are typically driven by economic recessions, high unemployment, or major crises. They can last months or years. Bear markets, while painful, are a normal part of the market cycle."
+    },
+    {
+        "question": "What is market volatility",
+        "answer": "Market volatility refers to how much and how quickly stock prices change. High volatility means prices swing dramatically in short periods. The VIX index, also called the fear index, measures expected market volatility. Volatility creates both risk and opportunity for investors."
+    },
+    {
+        "question": "What is inflation",
+        "answer": "Inflation is the rate at which the general level of prices rises over time, reducing purchasing power. Central banks like the Federal Reserve target around 2% annual inflation. High inflation erodes the value of savings and fixed income investments but can benefit real assets like stocks and real estate."
+    },
+    {
+        "question": "How does inflation affect stocks",
+        "answer": "Inflation has mixed effects on stocks. Moderate inflation is generally positive for stocks as it signals economic growth. High inflation hurts stocks because it raises costs for companies, reduces consumer spending, and typically leads the Federal Reserve to raise interest rates, which makes borrowing more expensive."
+    },
+    {
+        "question": "What is the Federal Reserve",
+        "answer": "The Federal Reserve, or Fed, is the central bank of the United States. It controls monetary policy by setting interest rates and managing the money supply. Fed decisions on interest rates have huge impacts on the stock market. When the Fed raises rates, borrowing becomes more expensive and stocks often fall."
+    },
+    {
+        "question": "What is an interest rate",
+        "answer": "An interest rate is the cost of borrowing money, expressed as a percentage. The Federal Reserve sets the federal funds rate, which influences all other interest rates in the economy. Higher interest rates make mortgages, car loans, and business loans more expensive, which can slow economic growth and impact stock prices."
+    },
+    {
+        "question": "What is a P/E ratio",
+        "answer": "The Price-to-Earnings (P/E) ratio measures how much investors pay for each dollar of a company's earnings. It is calculated by dividing the stock price by earnings per share. A P/E of 20 means investors pay $20 for every $1 of earnings. High P/E stocks are considered growth stocks; low P/E stocks are often considered value stocks."
+    },
+    {
+        "question": "What is earnings per share",
+        "answer": "Earnings per share (EPS) is a company's net profit divided by its number of outstanding shares. It measures how much profit a company generates per share. For example, if a company earns $10 million with 5 million shares outstanding, the EPS is $2. Rising EPS generally indicates a healthy, growing business."
+    },
+    {
+        "question": "What is market capitalization",
+        "answer": "Market capitalization, or market cap, is the total market value of a company's outstanding shares. It is calculated by multiplying the stock price by total shares outstanding. Companies are classified as large-cap (over $10B), mid-cap ($2B-$10B), or small-cap (under $2B)."
+    },
+    {
+        "question": "What is a large cap stock",
+        "answer": "Large cap stocks are shares of companies with a market capitalization over $10 billion. Examples include Apple, Microsoft, and Amazon. Large cap stocks are generally considered more stable and less risky than smaller companies. They often pay dividends and have long track records of performance."
+    },
+    {
+        "question": "What is a small cap stock",
+        "answer": "Small cap stocks are shares of companies with a market capitalization between $300 million and $2 billion. They offer higher growth potential but come with more risk and volatility than large cap stocks. Small caps can be great opportunities for early investors but require careful research."
+    },
+    {
+        "question": "What is an ETF",
+        "answer": "An Exchange-Traded Fund (ETF) is a basket of securities that trades on a stock exchange like a single stock. ETFs can track indexes like the S&P 500, specific sectors, commodities, or bonds. They offer diversification at low cost and are popular with both beginner and professional investors."
+    },
+    {
+        "question": "What is an index fund",
+        "answer": "An index fund is a type of mutual fund or ETF designed to replicate the performance of a market index like the S&P 500 or Dow Jones. Index funds offer broad market exposure, low costs, and historically strong long-term returns. Warren Buffett famously recommends index funds for most investors."
+    },
+    {
+        "question": "What is the S&P 500",
+        "answer": "The S&P 500 is a stock market index tracking the 500 largest publicly traded companies in the United States. It is widely considered the best gauge of the overall US stock market performance. Major companies in the S&P 500 include Apple, Microsoft, Amazon, and Google."
+    },
+    {
+        "question": "What is the Dow Jones",
+        "answer": "The Dow Jones Industrial Average (DJIA) is a stock market index tracking 30 large, publicly traded US companies. It is one of the oldest and most widely watched market indicators. Unlike the S&P 500, it only tracks 30 companies, making it a narrower measure of the overall market."
+    },
+    {
+        "question": "What is NASDAQ",
+        "answer": "NASDAQ is a stock exchange known for listing technology and growth companies. The NASDAQ Composite index tracks all stocks listed on the exchange. Major NASDAQ companies include Apple, Microsoft, Meta, Tesla, and Nvidia. NASDAQ is often seen as a barometer of the technology sector."
+    },
+    {
+        "question": "What is a bond",
+        "answer": "A bond is a fixed-income investment where you lend money to a government or corporation in exchange for regular interest payments and return of principal at maturity. Bonds are generally lower risk than stocks. Government bonds are the safest; corporate bonds offer higher yields with more risk."
+    },
+    {
+        "question": "What is yield",
+        "answer": "Yield is the income generated by an investment, expressed as a percentage of its price. Bond yield is the annual interest payment divided by the bond price. Dividend yield is the annual dividend divided by the stock price. Higher yields indicate more income but sometimes signal higher risk."
+    },
+    {
+        "question": "What is a mutual fund",
+        "answer": "A mutual fund pools money from many investors to buy a diversified portfolio of stocks, bonds, or other securities. It is managed by professional fund managers. Unlike ETFs, mutual funds are priced once per day after market close. They are popular choices for retirement accounts like 401(k)s."
+    },
+    {
+        "question": "What is a hedge fund",
+        "answer": "A hedge fund is a private investment fund that uses advanced strategies including leverage, short selling, and derivatives to generate returns. Hedge funds are typically only available to accredited investors with high net worth. They aim to generate positive returns in both rising and falling markets."
+    },
+    {
+        "question": "What is short selling",
+        "answer": "Short selling is a strategy where an investor borrows shares and sells them, hoping to buy them back at a lower price. For example, if you short 100 shares at $50 and the price falls to $30, you profit $20 per share. Short selling is high risk because losses are theoretically unlimited if the price rises."
+    },
+    {
+        "question": "What is leverage",
+        "answer": "Leverage means using borrowed money to amplify investment returns. For example, using $10,000 of your own money plus $10,000 borrowed to invest $20,000. Leverage magnifies both gains and losses. While it can increase returns in a bull market, it can wipe out your entire investment in a downturn."
+    },
+    {
+        "question": "What is a derivative",
+        "answer": "A derivative is a financial contract whose value is based on an underlying asset like a stock, bond, or commodity. Common derivatives include options and futures. They are used for hedging risk or speculation. Derivatives are complex instruments most suitable for experienced investors."
+    },
+    {
+        "question": "What is an option",
+        "answer": "An option is a contract giving the buyer the right, but not the obligation, to buy or sell a stock at a specific price before a certain date. A call option bets the price will rise; a put option bets the price will fall. Options are used for hedging existing positions or speculating on price movements."
+    },
+    {
+        "question": "What is a call option",
+        "answer": "A call option gives the holder the right to buy a stock at a set price called the strike price before the expiration date. Investors buy call options when they believe a stock's price will rise. If the stock rises above the strike price, the option becomes profitable."
+    },
+    {
+        "question": "What is a put option",
+        "answer": "A put option gives the holder the right to sell a stock at a set price before the expiration date. Investors buy put options as insurance against a stock falling in value, or to speculate on a price decline. If the stock falls below the strike price, the put option becomes profitable."
+    },
+    {
+        "question": "What is dollar cost averaging",
+        "answer": "Dollar cost averaging means investing a fixed amount of money at regular intervals regardless of market conditions. For example, investing $500 every month into an S&P 500 ETF. This strategy reduces the impact of volatility by buying more shares when prices are low and fewer when prices are high."
+    },
+    {
+        "question": "What is compound interest",
+        "answer": "Compound interest means earning returns on both your original investment and the accumulated returns from previous periods. Albert Einstein reportedly called it the eighth wonder of the world. A $10,000 investment growing at 10% annually becomes $25,937 after 10 years and $67,275 after 20 years due to compounding."
+    },
+    {
+        "question": "What is risk management",
+        "answer": "Risk management in investing involves strategies to limit potential losses. Common techniques include diversification, position sizing, stop-loss orders, and hedging. A key principle is never investing more than you can afford to lose. Understanding your risk tolerance is essential before building any investment strategy."
+    },
+    {
+        "question": "What is a stop loss",
+        "answer": "A stop loss is an order to automatically sell a stock when it reaches a certain price, limiting your loss. For example, if you buy a stock at $100 and set a stop loss at $90, it automatically sells if the price drops to $90. Stop losses protect investors from large unexpected losses."
+    },
+    {
+        "question": "What is technical analysis",
+        "answer": "Technical analysis studies historical price charts and trading volume to predict future price movements. Technical analysts use tools like moving averages, RSI, MACD, and support and resistance levels. It focuses entirely on price action rather than a company's fundamentals."
+    },
+    {
+        "question": "What is fundamental analysis",
+        "answer": "Fundamental analysis evaluates a company's intrinsic value by examining financial statements, earnings, revenue, debt, management quality, and industry conditions. Investors like Warren Buffett use fundamental analysis to find undervalued stocks. It focuses on whether a business is actually worth buying at its current price."
+    },
+    {
+        "question": "What is a blue chip stock",
+        "answer": "Blue chip stocks are shares of large, well-established companies with strong reputations and long histories of stable earnings. Examples include Apple, Johnson and Johnson, Coca-Cola, and Microsoft. Blue chips are considered safer investments and often pay consistent dividends."
+    },
+    {
+        "question": "What is a growth stock",
+        "answer": "Growth stocks are shares of companies expected to grow faster than the overall market. They typically reinvest profits back into the business rather than paying dividends. Examples include Tesla, Nvidia, and Netflix. Growth stocks can offer large returns but also carry higher risk and volatility."
+    },
+    {
+        "question": "What is a value stock",
+        "answer": "Value stocks are shares of companies trading below their intrinsic worth based on fundamentals like earnings, assets, and cash flow. Value investors look for overlooked or underappreciated companies with strong fundamentals. Warren Buffett is the most famous value investor."
+    },
+    {
+        "question": "What is a sector",
+        "answer": "A sector is a group of companies in the same industry. The stock market is divided into 11 sectors including technology, healthcare, financials, energy, consumer discretionary, and utilities. Sector rotation — moving money between sectors — is a common investment strategy based on economic cycles."
+    },
+    {
+        "question": "What is the technology sector",
+        "answer": "The technology sector includes companies that develop software, hardware, semiconductors, and internet services. It is the largest sector in the S&P 500. Major tech companies include Apple, Microsoft, Nvidia, Google, and Meta. The technology sector is known for high growth potential and high valuations."
+    },
+    {
+        "question": "What is the energy sector",
+        "answer": "The energy sector includes companies involved in producing, refining, and distributing oil, natural gas, and renewable energy. Energy stocks tend to rise when oil prices rise and fall when oil prices drop. Major energy companies include ExxonMobil, Chevron, and BP."
+    },
+    {
+        "question": "What is the healthcare sector",
+        "answer": "The healthcare sector includes pharmaceutical companies, medical device makers, hospitals, and biotech firms. Healthcare is considered a defensive sector because people need medical care regardless of economic conditions. Major companies include Johnson and Johnson, Pfizer, and UnitedHealth Group."
+    },
+    {
+        "question": "What is a recession",
+        "answer": "A recession is a significant decline in economic activity lasting more than two consecutive quarters. During recessions, GDP falls, unemployment rises, and consumer spending drops. Recessions are a normal part of the economic cycle. Defensive stocks like utilities and consumer staples tend to hold up better during recessions."
+    },
+    {
+        "question": "What is GDP",
+        "answer": "GDP stands for Gross Domestic Product and measures the total value of all goods and services produced in a country over a specific period. It is the primary measure of economic health. Rising GDP signals economic growth and is generally positive for stocks. Falling GDP can signal recession."
+    },
+    {
+        "question": "What is quantitative easing",
+        "answer": "Quantitative easing (QE) is when a central bank buys government bonds and other assets to inject money into the economy. The Federal Reserve used QE extensively after the 2008 financial crisis and during COVID-19. QE tends to push stock prices higher by lowering interest rates and increasing money supply."
+    },
+    {
+        "question": "What is a stock split",
+        "answer": "A stock split increases the number of shares while reducing the price proportionally. For example, in a 2-for-1 split, you get 2 shares for every 1 you own but each is worth half the price. The total value stays the same. Companies split stocks to make shares more affordable to small investors."
+    },
+    {
+        "question": "What is an IPO",
+        "answer": "An IPO, or Initial Public Offering, is when a private company sells shares to the public for the first time. IPOs allow companies to raise large amounts of capital. Famous IPOs include Google in 2004, Facebook in 2012, and Alibaba in 2014. IPO stocks can be highly volatile in their early trading days."
+    },
+    {
+        "question": "What is a market order",
+        "answer": "A market order is an instruction to buy or sell a stock immediately at the best available price. Market orders guarantee execution but not price. In a fast-moving market, the price you get may differ from the last quoted price. Market orders are best for highly liquid stocks."
+    },
+    {
+        "question": "What is a limit order",
+        "answer": "A limit order is an instruction to buy or sell a stock at a specific price or better. A buy limit order executes only at or below your specified price. A sell limit order executes only at or above your specified price. Limit orders give you price control but may not execute if the price never reaches your limit."
+    },
+    {
+        "question": "What is trading volume",
+        "answer": "Trading volume is the number of shares traded during a given period. High volume indicates strong investor interest and confirms price trends. Low volume can signal weak conviction behind a price move. Volume is a key tool in technical analysis for confirming breakouts and reversals."
+    },
+    {
+        "question": "What is a moving average",
+        "answer": "A moving average smooths out price data by calculating the average price over a specific number of days. The 50-day and 200-day moving averages are widely watched. When a stock crosses above its 200-day moving average it is considered a bullish signal. Crossovers between moving averages are popular buy and sell signals."
+    },
+    {
+        "question": "What is the yield curve",
+        "answer": "The yield curve shows the relationship between interest rates and bond maturity dates. A normal yield curve slopes upward — longer-term bonds have higher yields. An inverted yield curve, where short-term yields exceed long-term yields, is historically a reliable predictor of recession."
+    },
+    {
+        "question": "What is a real estate investment trust",
+        "answer": "A Real Estate Investment Trust (REIT) is a company that owns income-producing real estate. REITs allow regular investors to invest in real estate without buying property directly. They are required to pay at least 90% of taxable income as dividends. REITs are popular for income-focused investors."
+    },
+    {
+        "question": "What is a commodity",
+        "answer": "A commodity is a basic good used in commerce that is interchangeable with other goods of the same type. Examples include oil, gold, silver, wheat, and copper. Commodity prices are driven by supply and demand. Investors use commodities to diversify portfolios and hedge against inflation."
+    },
+    {
+        "question": "What is gold as an investment",
+        "answer": "Gold is considered a safe haven asset — investors buy it during times of uncertainty and inflation. Gold does not pay dividends or interest but holds its value over long periods. It tends to rise when the dollar weakens and fall when interest rates rise. Gold is often used to hedge against market crashes."
+    },
+    {
+        "question": "What is a 401k",
+        "answer": "A 401k is an employer-sponsored retirement savings plan that allows workers to invest pre-tax income. Contributions grow tax-deferred until withdrawal. Many employers match contributions up to a certain percentage — this is essentially free money. The annual contribution limit in 2024 is $23,000."
+    },
+    {
+        "question": "What is an IRA",
+        "answer": "An Individual Retirement Account (IRA) is a tax-advantaged investment account for retirement savings. A traditional IRA offers tax-deductible contributions. A Roth IRA offers tax-free withdrawals in retirement. The annual contribution limit is $7,000 in 2024. IRAs can hold stocks, bonds, ETFs, and mutual funds."
+    },
+    {
+        "question": "What is asset allocation",
+        "answer": "Asset allocation is dividing your investments among different asset classes like stocks, bonds, and cash. A common rule of thumb is to subtract your age from 110 to get your stock allocation. For example, a 30-year-old might hold 80% stocks and 20% bonds. Asset allocation is the most important factor in long-term portfolio returns."
+    },
+    {
+        "question": "What is rebalancing a portfolio",
+        "answer": "Rebalancing means adjusting your portfolio back to your target asset allocation when it drifts due to market movements. For example, if stocks rise and become 80% of your portfolio when your target is 70%, you sell some stocks and buy bonds to rebalance. Rebalancing maintains your desired risk level."
+    },
+    {
+        "question": "What is passive investing",
+        "answer": "Passive investing means buying and holding index funds or ETFs that track the market rather than trying to beat it. Research consistently shows that most active fund managers underperform the index over time. Passive investing offers low costs, tax efficiency, and historically strong long-term returns."
+    },
+    {
+        "question": "What is active investing",
+        "answer": "Active investing means selecting individual stocks or actively managed funds in an attempt to outperform the market. Active investors conduct extensive research and trade more frequently. While some active investors do outperform, studies show the majority underperform low-cost index funds over the long term."
+    },
+    {
+        "question": "What is Warren Buffett investment strategy",
+        "answer": "Warren Buffett follows a value investing strategy focused on buying wonderful companies at fair prices and holding them long-term. His key principles include investing in businesses you understand, focusing on companies with durable competitive advantages, being greedy when others are fearful, and avoiding speculation."
+    },
+    {
+        "question": "What is a competitive advantage moat",
+        "answer": "A competitive advantage or economic moat is a sustainable edge that protects a company from competitors. Types of moats include brand loyalty (Apple, Coca-Cola), network effects (Facebook, Visa), cost advantages (Amazon, Walmart), and switching costs (Microsoft). Companies with strong moats tend to generate superior returns over time."
+    },
+    {
+        "question": "What is cash flow",
+        "answer": "Cash flow is the movement of money in and out of a business. Free cash flow — revenue minus capital expenditures — is a key measure of financial health. Companies with strong free cash flow can pay dividends, buy back stock, pay down debt, or invest in growth. Warren Buffett focuses heavily on free cash flow when evaluating businesses."
+    },
+    {
+        "question": "What is a stock buyback",
+        "answer": "A stock buyback is when a company repurchases its own shares from the open market. Buybacks reduce the number of shares outstanding, which increases earnings per share and often boosts the stock price. Companies buy back shares when they believe their stock is undervalued. Apple has returned hundreds of billions through buybacks."
+    },
+    {
+        "question": "What is earnings season",
+        "answer": "Earnings season occurs four times a year when public companies report their quarterly financial results. It typically starts a few weeks after each quarter ends. Strong earnings reports usually push stocks higher while weak results cause declines. Earnings season is one of the most volatile periods in the stock market."
+    },
+    {
+        "question": "What is revenue",
+        "answer": "Revenue is the total money a company earns from selling its products or services before any expenses are deducted. It is also called the top line because it appears at the top of the income statement. Growing revenue indicates a business is expanding. However revenue alone is not enough — profitability matters too."
+    },
+    {
+        "question": "What is profit margin",
+        "answer": "Profit margin measures how much profit a company keeps from each dollar of revenue. Net profit margin equals net income divided by revenue. A 20% net margin means the company keeps $0.20 from every $1 of sales. Higher margins indicate a more efficient, profitable business. Technology companies often have very high margins."
+    },
+    {
+        "question": "What is debt to equity ratio",
+        "answer": "The debt-to-equity ratio measures how much debt a company uses relative to shareholder equity. A ratio of 1.0 means equal debt and equity. High debt ratios increase financial risk — too much debt can lead to bankruptcy if revenue falls. Conservative investors prefer companies with low or manageable debt levels."
+    },
+    {
+        "question": "What is return on equity",
+        "answer": "Return on Equity (ROE) measures how efficiently a company generates profit from shareholders equity. It equals net income divided by shareholder equity. A high ROE indicates management is effectively using investor money to generate returns. Warren Buffett looks for companies consistently generating ROE above 15%."
+    },
+    {
+        "question": "What is the consumer price index",
+        "answer": "The Consumer Price Index (CPI) measures the average change in prices paid by consumers for a basket of goods and services. It is the most widely used measure of inflation. The CPI data is released monthly by the Bureau of Labor Statistics. Higher-than-expected CPI often causes stock markets to fall as it signals potential Fed rate hikes."
+    },
+    {
+        "question": "What is unemployment rate",
+        "answer": "The unemployment rate measures the percentage of people actively looking for work who cannot find a job. Low unemployment signals a strong economy and is generally positive for stocks. Very low unemployment can lead to wage inflation, which may prompt the Federal Reserve to raise interest rates."
+    },
+    {
+        "question": "What is a market correction",
+        "answer": "A market correction is a decline of 10% to 20% from a recent peak in stock prices. Corrections are considered healthy and normal — they prevent markets from becoming overheated. On average, the US stock market experiences a correction roughly once per year. Corrections that exceed 20% become bear markets."
+    },
+    {
+        "question": "What is liquidity",
+        "answer": "Liquidity refers to how quickly and easily an asset can be converted to cash without significantly affecting its price. Stocks of large companies like Apple are highly liquid — millions of shares trade daily. Small cap or penny stocks have lower liquidity. Cash is the most liquid asset of all."
+    },
+    {
+        "question": "What is a penny stock",
+        "answer": "A penny stock is a share trading below $5, often in very small companies. Penny stocks are highly speculative, have low liquidity, and are susceptible to pump and dump schemes. While some penny stocks do become successful companies, the vast majority fail. Most financial advisors warn inexperienced investors to avoid them."
+    },
+    {
+        "question": "What is insider trading",
+        "answer": "Insider trading is buying or selling a stock based on material non-public information about the company. It is illegal and considered a form of market manipulation. The SEC actively investigates and prosecutes insider trading cases. Even company executives must follow strict rules about when they can buy or sell their own company's stock."
+    },
+    {
+        "question": "What is the SEC",
+        "answer": "The Securities and Exchange Commission (SEC) is the US government agency that regulates the securities industry and enforces federal securities laws. The SEC requires public companies to disclose financial information, investigates fraud and insider trading, and protects investors from market manipulation."
+    },
+    {
+        "question": "How do I start investing in stocks",
+        "answer": "To start investing in stocks, open a brokerage account with a platform like Fidelity, Vanguard, or Charles Schwab. Start with a small amount you can afford to lose. Begin with broad market index funds like an S&P 500 ETF for diversification. Invest regularly through dollar cost averaging. Focus on long-term growth, not short-term gains."
+    },
+    {
+        "question": "What is a brokerage account",
+        "answer": "A brokerage account is an investment account that allows you to buy and sell securities like stocks, bonds, and ETFs. Popular brokers include Fidelity, Vanguard, Charles Schwab, and Robinhood. Most offer commission-free trading. Unlike retirement accounts, brokerage accounts have no contribution limits but gains are taxable."
+    },
+    {
+        "question": "What are capital gains",
+        "answer": "Capital gains are profits from selling an investment for more than you paid. Short-term capital gains on assets held less than a year are taxed as ordinary income. Long-term capital gains on assets held over a year are taxed at lower rates of 0%, 15%, or 20% depending on your income. Holding investments long-term reduces your tax burden."
+    },
+    {
+        "question": "What is semiconductor stocks",
+        "answer": "Semiconductor stocks are shares of companies that design and manufacture chips used in computers, smartphones, and AI systems. Key companies include Nvidia, TSMC, Intel, AMD, and Qualcomm. The semiconductor industry is highly cyclical and sensitive to supply chain issues. AI growth has driven massive demand for advanced chips."
+    },
+    {
+        "question": "What is artificial intelligence impact on stocks",
+        "answer": "Artificial intelligence has become a major driver of stock market growth, particularly for technology companies. Nvidia saw its stock price multiply many times over due to AI chip demand. Companies like Microsoft, Google, and Amazon are investing billions in AI infrastructure. AI is expected to drive productivity gains across all sectors of the economy."
+    },
+    {
+        "question": "What is supply and demand in stocks",
+        "answer": "Stock prices are driven by supply and demand. When more investors want to buy a stock than sell it, prices rise. When more want to sell than buy, prices fall. Factors affecting demand include earnings reports, economic data, news events, and investor sentiment. Understanding supply and demand is fundamental to understanding price movements."
+    },
+    {
+        "question": "What is market sentiment",
+        "answer": "Market sentiment refers to the overall attitude of investors toward the market or a particular stock. Bullish sentiment means investors are optimistic and expect prices to rise. Bearish sentiment means investors are pessimistic. Sentiment can be measured through surveys, options activity, and the VIX volatility index. Extreme sentiment often signals market turning points."
+    },
+    {
+        "question": "What is a financial statement",
+        "answer": "A financial statement is an official report of a company's financial condition. The three main statements are the income statement (shows revenues and profits), the balance sheet (shows assets, liabilities, and equity), and the cash flow statement (shows money moving in and out). Public companies must file these quarterly with the SEC."
+    },
+    {
+        "question": "What is a balance sheet",
+        "answer": "A balance sheet is a financial statement showing a company's assets, liabilities, and shareholder equity at a specific point in time. Assets equal liabilities plus equity. It shows what a company owns versus what it owes. A strong balance sheet with low debt and high cash provides financial flexibility and resilience during downturns."
+    },
+    {
+        "question": "What is net income",
+        "answer": "Net income is a company's total profit after all expenses, taxes, and costs have been deducted from revenue. It is also called the bottom line because it appears at the bottom of the income statement. Rising net income indicates a growing, profitable business. EPS is calculated by dividing net income by shares outstanding."
+    },
+    {
+        "question": "What is a futures contract",
+        "answer": "A futures contract is an agreement to buy or sell an asset at a predetermined price on a future date. Futures are used by producers to lock in prices and by speculators to profit from price movements. Stock index futures let investors bet on the direction of indexes like the S&P 500. Futures are traded on specialized exchanges."
+    },
+    {
+        "question": "What is exchange rate impact on stocks",
+        "answer": "Exchange rates affect multinational companies significantly. A strong US dollar reduces the value of overseas earnings when converted back to dollars, hurting companies with large international revenue like Apple or Microsoft. A weak dollar boosts overseas earnings. Currency fluctuations can be a major factor in international investment returns."
+    },
+    {
+        "question": "What is a safe haven asset",
+        "answer": "Safe haven assets are investments that tend to hold or increase in value during market turmoil. Examples include gold, US Treasury bonds, the Swiss franc, and the Japanese yen. Investors flock to safe havens during recessions, geopolitical crises, or market crashes. They typically offer lower returns in normal conditions but provide stability during downturns."
+    },
+    {
+        "question": "What is market timing",
+        "answer": "Market timing is attempting to predict when to enter and exit the market to maximize returns. Research consistently shows that even professional investors cannot reliably time the market. Missing just the 10 best days in a decade can cut returns in half. Most financial experts recommend staying invested rather than trying to time the market."
+    },
+    {
+        "question": "What is long term investing",
+        "answer": "Long term investing means holding investments for many years or decades rather than trading frequently. Historically the S&P 500 has returned approximately 10% annually over the long term. Staying invested through market cycles, reinvesting dividends, and letting compound growth work are key principles. Time in the market beats timing the market."
+    }
+]

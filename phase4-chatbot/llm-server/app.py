@@ -1,12 +1,21 @@
 # ============================================
-# APP.PY — Python Flask Server (PyTorch Version)
-# Full model classes included — no imports needed
+# APP.PY — Flask Server with RAG Pipeline
+# RAG = Retrieval Augmented Generation
+#
+# Flow:
+#   1. User sends question
+#   2. Search knowledge base for best match
+#   3a. If good match found → return the answer
+#   3b. If no match → fall back to TinyLLM generation
+#   4. Return response to Node.js → browser
+#
 # Run with: python app.py
 # Listens on: http://localhost:5000
 # ============================================
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from knowledge_base import KnowledgeBase
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -18,8 +27,13 @@ CORS(app)
 
 
 # ============================================
-# STEP 1 — Load vocab from vocab.json
-# (created by train.py)
+# STEP 1 — Load Knowledge Base
+# ============================================
+kb = KnowledgeBase("data/qa_pairs.json")
+
+
+# ============================================
+# STEP 2 — Load Vocab
 # ============================================
 with open("vocab.json", "r") as f:
     vocab_data = json.load(f)
@@ -36,8 +50,8 @@ print(f"Vocab loaded: {vocab_size} characters")
 
 
 # ============================================
-# STEP 2 — Model hyperparameters
-# Must match EXACTLY what you used in train.py
+# STEP 3 — Model Hyperparameters
+# Must match train.py exactly
 # ============================================
 BLOCK_SIZE = 64
 EMBED_SIZE = 64
@@ -48,8 +62,7 @@ DROPOUT    = 0.1
 
 
 # ============================================
-# STEP 3 — Model classes
-# Exact same classes as train.py
+# STEP 4 — PyTorch Model Classes
 # ============================================
 
 class Head(nn.Module):
@@ -130,12 +143,10 @@ class TinyLLM(nn.Module):
         x      = self.blocks(tok + pos)
         x      = self.ln(x)
         logits = self.head(x)
-
-        loss = None
+        loss   = None
         if targets is not None:
             B, T, C = logits.shape
             loss = F.cross_entropy(logits.view(B * T, C), targets.view(B * T))
-
         return logits, loss
 
     def generate(self, idx, n_chars, temperature=1.0):
@@ -150,37 +161,83 @@ class TinyLLM(nn.Module):
 
 
 # ============================================
-# STEP 4 — Load trained weights
+# STEP 5 — Load Trained Weights
 # ============================================
-model = TinyLLM()
-model.load_state_dict(torch.load("weights_torch.pt", map_location='cpu'))
-model.eval()   # puts model in inference mode (disables dropout)
-print("PyTorch model loaded successfully!")
+llm_available = False
+model = None
+
+try:
+    model = TinyLLM()
+    model.load_state_dict(torch.load("weights_torch.pt", map_location='cpu'))
+    model.eval()
+    llm_available = True
+    print("PyTorch LLM loaded successfully!")
+except FileNotFoundError:
+    print("weights_torch.pt not found — LLM fallback disabled.")
+    print("RAG knowledge base will still answer known questions.")
 
 
 # ============================================
-# STEP 5 — Helper: generate a response
+# STEP 6 — LLM Generation Helper
 # ============================================
-def generate_response(seed_text, n_chars=150, temperature=1.0):
+def llm_generate(seed_text, n_chars=120, temperature=1.0):
     """
-    Takes seed text, runs the model, returns generated continuation.
+    Generate text from the TinyLLM as a fallback
+    when no knowledge base match is found.
     """
-    # Filter to known characters only
+    if not llm_available:
+        return "I don't have specific information about that in my knowledge base. Try asking about stocks, dividends, ETFs, inflation, or other common investment topics."
+
     safe_seed = ''.join(c for c in seed_text if c in c2i)
     if not safe_seed:
         safe_seed = "Stock"
 
-    # Encode seed to token IDs
     token_ids = encode(safe_seed)
-    idx       = torch.tensor([token_ids], dtype=torch.long)
+    idx = torch.tensor([token_ids], dtype=torch.long)
 
-    # Generate with no gradient tracking (faster, less memory)
     with torch.no_grad():
         output = model.generate(idx, n_chars=n_chars, temperature=temperature)
 
-    # Decode only the NEW characters (skip the seed)
     generated_ids = output[0].tolist()[len(token_ids):]
     return decode(generated_ids)
+
+
+# ============================================
+# STEP 7 — RAG Pipeline
+# The core of the upgrade — combines KB + LLM
+# ============================================
+def rag_pipeline(user_message, temperature=1.0):
+    """
+    Full RAG pipeline:
+
+    1. Search knowledge base for best answer
+    2a. High confidence match (score > 0.2) → return KB answer directly
+    2b. Medium confidence (0.1-0.2) → return KB answer with note
+    2c. No match (score < 0.1) → fall back to LLM generation
+
+    Returns: (response_text, source)
+    source = 'knowledge_base' or 'llm_generation'
+    """
+
+    # Step 1: Search knowledge base
+    answer, score = kb.get_answer(user_message, threshold=0.10)
+
+    print(f"KB search score: {score:.4f}")
+
+    # Step 2a: Strong match → use KB answer directly
+    if score >= 0.20:
+        print(f"→ Strong KB match (score {score:.4f})")
+        return answer, "knowledge_base"
+
+    # Step 2b: Weak match — still use it but flag it
+    if score >= 0.10:
+        print(f"→ Weak KB match (score {score:.4f})")
+        return answer, "knowledge_base"
+
+    # Step 2c: No match → fall back to LLM
+    print(f"→ No KB match — using LLM fallback")
+    response = llm_generate(user_message, n_chars=120, temperature=temperature)
+    return response, "llm_generation"
 
 
 # ============================================
@@ -190,38 +247,63 @@ def generate_response(seed_text, n_chars=150, temperature=1.0):
 @app.route('/health', methods=['GET'])
 def health():
     return jsonify({
-        "status":     "ok",
-        "vocab_size": vocab_size,
-        "model":      "TinyLLM PyTorch"
+        "status":       "ok",
+        "vocab_size":   vocab_size,
+        "llm_loaded":   llm_available,
+        "kb_size":      len(kb.qa_pairs),
+        "model":        "TinyLLM + RAG"
     })
 
 
 @app.route('/generate', methods=['POST'])
 def generate():
+    """
+    Main chat endpoint.
+    Receives user message → runs RAG pipeline → returns response.
+    """
     data = request.get_json()
 
     if not data or 'message' not in data:
-        return jsonify({ "error": "Missing 'message' in request body" }), 400
+        return jsonify({ "error": "Missing 'message' in request" }), 400
 
-    message     = data.get('message', '')
+    message     = data.get('message', '').strip()
     temperature = float(data.get('temperature', 1.0))
-    n_chars     = int(data.get('n_chars', 150))
 
-    print(f"Received: '{message}'")
+    if not message:
+        return jsonify({ "error": "Message is empty" }), 400
 
-    response = generate_response(message, n_chars=n_chars, temperature=temperature)
+    print(f"\nUser: '{message}'")
 
-    print(f"Generated: '{response[:60]}...'")
+    # Run the RAG pipeline
+    response, source = rag_pipeline(message, temperature)
+
+    print(f"Source: {source}")
+    print(f"Response: '{response[:80]}...'")
 
     return jsonify({
         "response": response,
+        "source":   source,      # tells UI where answer came from
         "seed":     message
     })
+
+
+@app.route('/search', methods=['POST'])
+def search():
+    """
+    Debug endpoint — shows top 3 KB matches for a query.
+    Useful for testing the knowledge base.
+    """
+    data    = request.get_json()
+    query   = data.get('query', '')
+    results = kb.search(query, top_k=3, threshold=0.0)
+    return jsonify({ "query": query, "results": results })
 
 
 # ============================================
 # START
 # ============================================
 if __name__ == '__main__':
-    print("\nFlask LLM server running at http://localhost:5000\n")
+    print(f"\nStockAI RAG Server running at http://localhost:5000")
+    print(f"Knowledge base: {len(kb.qa_pairs)} Q&A pairs")
+    print(f"LLM fallback: {'enabled' if llm_available else 'disabled'}\n")
     app.run(host='0.0.0.0', port=5000, debug=False)

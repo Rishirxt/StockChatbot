@@ -1,0 +1,106 @@
+Maths Layer
+1)Vectors
+2)Dot product
+Tokenizer output: [45, 12, 89]  (token IDs)
+        ↓
+Embedding layer:  turns each ID into a VECTOR
+        ↓
+Attention:        uses DOT PRODUCT to decide which words relate
+        ↓
+Each layer:       uses MATRIX MULTIPLICATION to transform the data
+        ↓   
+Output:           predicts next token
+--------------------------------------------------
+NEURAL NETWORKS
+1-Neuron
+1. Takes inputs
+2. Multiplies each by a weight
+3. Adds them up (+ a bias number)
+
+output = (input1 × w1) + (input2 × w2) + (input3 × w3) + bias
+Concept 2: Activation Function
+There's a problem. Right now neurons just do linear math. Stack 100 of them and it's still just linear math — no better than one neuron.
+We need non-linearity — a function that squishes and bends the output so the network can learn complex patterns.
+The most common one is ReLU (Rectified Linear Unit). Sounds fancy. It's not:
+
+Concept 3: Forward Pass (The Full Network)
+Now let's connect multiple neurons into a real network. Data flows forward through layers — this is called the forward pass.
+
+Layer 1 (hidden): 3 neurons process the inputs
+Layer 2 (output): 1 neuron gives the final risk score
+
+Concept 4: Loss — How Wrong Is The Network?
+We need to measure how wrong the network's prediction is. This is called loss.
+The formula is simple — Mean Squared Error (MSE):
+loss = (predicted - actual)²
+
+predicted = 0.8  (network said high risk)
+actual    = 0.2  (really low risk stock)
+loss      = (0.8 - 0.2)² = 0.36  ← big error!
+
+predicted = 0.79
+actual    = 0.8
+loss      = (0.79 - 0.8)² = 0.0001  ← tiny error, almost right!
+
+Concept 5: Backpropagation (How It Learns)
+This is the most important concept. After calculating loss, the network needs to adjust its weights to be less wrong next time.
+The idea:
+1. Calculate loss          ← how wrong are we?
+2. Work BACKWARDS          ← which weights caused the error?
+3. Nudge each weight       ← a tiny bit in the right direction
+4. Repeat 1000s of times   ← gradually gets smarter
+
+So volatility influences the output the most. Volume the least.A high weight = that input matters a lot
+A low weight = that input barely mattersThe whole point of training is to find the right weights so the network makes correct predictions. Before training they're random guesses. After training they're meaningful.
+
+
+📌 What Is Bias?
+Bias is a safety net number added after the weighted sum.
+Imagine a neuron with these inputs and weights:
+inputs  = [0.0, 0.0, 0.0]   ← all zeros (dead stock, no movement)
+weights = [0.4, 0.3, 0.6]
+
+weighted_sum = (0×0.4) + (0×0.5) + (0×0.6) = 0.0
+
+
+-----------------------------------------------------------------------------------------------------------
+
+stocks.txt  (raw text)
+     ↓
+tokenizer.py  — Concept 1: text → numbers, build vocab --->Before the model can read text it needs to convert characters into numbers. That's all a tokenizer does.
+     ↓
+embeddings.py — Concept 2: numbers → vectors (lookup table)----->Each token number needs to become a vector (a list of floats) so the model can find relationships between characters.
+     ↓
+attention.py  — Concept 3: Q/K/V, figure out token relationships --->When I'm trying to predict the next character, which previous characters should I focus on?"
+     ↓
+model.py      — Concept 4: stack attention + feedforward into transformer blocks
+     ↓
+train.py      — Concept 5: training loop, loss, backprop, weight updates
+     ↓
+generate.py   — use trained model to generate new stock text
+
+
+Q = Query   "What am I looking for?"
+K = Key     "What do I contain?"
+V = Value   "What do I actually give out?"
+
+stocks.txt
+    ↓ read by
+tokenizer.py   → builds vocab, encode/decode
+    ↓ used by
+embeddings.py  → token IDs → vectors
+    ↓ used by
+attention.py   → vectors → context-aware vectors
+    ↓ used by
+model.py       → stacks everything into one forward pass
+    ↓ used by
+train.py       → runs the training loop, saves weights.json
+    ↓ used by
+generate.py    → loads weights, generates new stock text
+
+
+Phase 1 ✅  Math foundations (vectors, dot product, matrices)
+Phase 2 ✅  Built a neural network from scratch
+Phase 3 ✅  Built a tiny transformer LLM
+Phase 4 ✅  Wrapped it in a web chatbot
+Phase 5 ✅  Added RAG — real intelligent Q&A
