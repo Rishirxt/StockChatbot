@@ -25,17 +25,22 @@ import os
 app = Flask(__name__)
 CORS(app)
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+KB_PATH = os.path.join(BASE_DIR, "Data", "qa_pairs.json")
+VOCAB_PATH = os.path.join(BASE_DIR, "vocab.json")
+WEIGHTS_PATH = os.path.join(BASE_DIR, "weights_torch.pt")
+
 
 # ============================================
 # STEP 1 — Load Knowledge Base
 # ============================================
-kb = KnowledgeBase("data/qa_pairs.json")
+kb = KnowledgeBase(KB_PATH)
 
 
 # ============================================
 # STEP 2 — Load Vocab
 # ============================================
-with open("vocab.json", "r") as f:
+with open(VOCAB_PATH, "r") as f:
     vocab_data = json.load(f)
 
 vocab      = vocab_data["vocab"]
@@ -59,6 +64,34 @@ HEAD_SIZE  = 32
 N_HEADS    = 4
 N_LAYERS   = 3
 DROPOUT    = 0.1
+
+
+def infer_model_config(state_dict):
+    """
+    Infer the training-time architecture from the saved weights.
+    This keeps app.py aligned with the current checkpoint.
+    """
+    vocab_size_from_weights, embed_size = state_dict["tok_emb.weight"].shape
+    block_size, _ = state_dict["pos_emb.weight"].shape
+
+    layer_ids = {
+        int(key.split(".")[1])
+        for key in state_dict
+        if key.startswith("blocks.") and key.split(".")[1].isdigit()
+    }
+    head_ids = {
+        int(key.split(".")[4])
+        for key in state_dict
+        if key.startswith("blocks.0.sa.heads.") and key.split(".")[4].isdigit()
+    }
+
+    return {
+        "vocab_size": vocab_size_from_weights,
+        "embed_size": embed_size,
+        "block_size": block_size,
+        "n_layers": max(layer_ids) + 1 if layer_ids else 0,
+        "n_heads": max(head_ids) + 1 if head_ids else 1,
+    }
 
 
 # ============================================
@@ -167,13 +200,30 @@ llm_available = False
 model = None
 
 try:
+    state_dict = torch.load(WEIGHTS_PATH, map_location='cpu')
+    config = infer_model_config(state_dict)
+
+    BLOCK_SIZE = config["block_size"]
+    EMBED_SIZE = config["embed_size"]
+    N_HEADS = config["n_heads"]
+    N_LAYERS = config["n_layers"]
+    HEAD_SIZE = EMBED_SIZE // N_HEADS
+
+    if config["vocab_size"] != vocab_size:
+        raise RuntimeError(
+            f"Checkpoint vocab size ({config['vocab_size']}) does not match vocab.json ({vocab_size})."
+        )
+
     model = TinyLLM()
-    model.load_state_dict(torch.load("weights_torch.pt", map_location='cpu'))
+    model.load_state_dict(state_dict)
     model.eval()
     llm_available = True
     print("PyTorch LLM loaded successfully!")
 except FileNotFoundError:
     print("weights_torch.pt not found — LLM fallback disabled.")
+    print("RAG knowledge base will still answer known questions.")
+except RuntimeError as e:
+    print(f"Could not load weights_torch.pt â€” LLM fallback disabled. {e}")
     print("RAG knowledge base will still answer known questions.")
 
 

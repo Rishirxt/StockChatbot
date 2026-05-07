@@ -28,14 +28,14 @@ print(f"Vocab size: {vocab_size}")
 print(f"Training chars: {len(data)}")
 
 # ── Hyperparameters — tune these
-BLOCK_SIZE  = 64     # context window (chars)
-EMBED_SIZE  = 64     # embedding dimensions
+BLOCK_SIZE  = 128     # context window (chars)
+EMBED_SIZE  = 128    # embedding dimensions
 HEAD_SIZE   = 32     # attention head size
 N_HEADS     = 4      # number of attention heads
-N_LAYERS    = 3      # transformer blocks
+N_LAYERS    = 4      # transformer blocks
 DROPOUT     = 0.1    # dropout rate
-BATCH_SIZE  = 32     # examples per step
-N_STEPS     = 5000   # training steps
+BATCH_SIZE  = 64     # examples per step
+N_STEPS     = 10000   # training steps
 LEARN_RATE  = 3e-4   # learning rate
 EVAL_EVERY  = 500    # print loss every N steps
 
