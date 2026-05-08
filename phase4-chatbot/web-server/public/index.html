@@ -4,101 +4,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock AI — Portfolio Assistant</title>
+    <title>StockAI Support</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap"
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
-
-    <!-- HEADER -->
-    <header>
-        <div class="header-left">
-            <div class="logo-mark"></div>
+<body class="widget-open">
+    <div class="page-shell">
+        <header class="site-header">
             <div>
-                <div class="logo-text">STOCK<span>AI</span></div>
-                <div class="logo-sub">Portfolio Intelligence</div>
+                <div class="site-eyebrow">StockAI</div>
+                <h1>Investment support that feels like a live help desk.</h1>
             </div>
-        </div>
-        <div class="header-right">
-            <div class="status-dot" id="status-dot"></div>
-            <span class="status-text" id="status-text">Connecting...</span>
-            <div class="temp-control">
-                <span class="temp-label">TEMP</span>
-                <input type="range" id="temp-slider" min="1" max="20" value="10" title="Temperature">
-                <span class="temp-val" id="temp-val">1.0</span>
-            </div>
-        </div>
-    </header>
+            <div class="site-pill">AI assistant active</div>
+        </header>
 
-    <!-- TICKER TAPE -->
-    <div class="ticker-wrap">
-        <div class="ticker">
-            <span>AAPL +2.3%</span><span class="sep">◆</span>
-            <span>MSFT +1.1%</span><span class="sep">◆</span>
-            <span>TSLA -0.8%</span><span class="sep">◆</span>
-            <span>NVDA +4.2%</span><span class="sep">◆</span>
-            <span>AMZN +0.5%</span><span class="sep">◆</span>
-            <span>GOOGL +1.7%</span><span class="sep">◆</span>
-            <span>META +2.9%</span><span class="sep">◆</span>
-            <span>BRK.B -0.3%</span><span class="sep">◆</span>
-            <span>JPM +0.6%</span><span class="sep">◆</span>
-            <span>AAPL +2.3%</span><span class="sep">◆</span>
-            <span>MSFT +1.1%</span><span class="sep">◆</span>
-            <span>TSLA -0.8%</span><span class="sep">◆</span>
-            <span>NVDA +4.2%</span><span class="sep">◆</span>
-            <span>AMZN +0.5%</span><span class="sep">◆</span>
-            <span>GOOGL +1.7%</span><span class="sep">◆</span>
-        </div>
+        <main class="site-main">
+            <section class="hero-card">
+                <p class="hero-kicker">Support widget preview</p>
+                <h2>Ask market questions from a side panel, just like common support chat on modern websites.</h2>
+                <p class="hero-copy">
+                    This version keeps your stock assistant available in a floating panel so people can browse the
+                    page and ask for help without leaving the content.
+                </p>
+                <div class="hero-actions">
+                    <button class="hero-btn primary" id="open-chat-btn" type="button">Open support chat</button>
+                    <button class="hero-btn secondary" type="button"
+                        onclick="usePrompt('Explain portfolio diversification')">Try a sample question</button>
+                </div>
+            </section>
+
+            <section class="info-grid">
+                <article class="info-card accent">
+                    <p class="info-label">Fast answers</p>
+                    <h3>Get help with stocks, ETFs, dividends, and portfolio basics.</h3>
+                </article>
+                <article class="info-card">
+                    <p class="info-label">Side mounted</p>
+                    <h3>The assistant stays available while the rest of the site remains visible.</h3>
+                </article>
+                <article class="info-card">
+                    <p class="info-label">Familiar UX</p>
+                    <h3>Launcher, compact header, quick prompts, and a clean message feed.</h3>
+                </article>
+            </section>
+        </main>
     </div>
 
-    <!-- CHAT AREA -->
-    <main>
-        <div id="chat-window">
-            <!-- Welcome message -->
-            <div class="msg-row bot-row">
-                <div class="avatar bot-avatar">AI</div>
-                <div class="bubble bot-bubble">
-                    <div class="bubble-header">StockAI <span class="bubble-time" id="welcome-time"></span></div>
-                    <div class="bubble-body">
-                        Hello. I am your portfolio intelligence assistant, trained on stock market data.<br><br>
-                        Ask me about <strong>market trends</strong>, <strong>investment concepts</strong>, or
-                        <strong>portfolio strategies</strong>.
-                        I will generate a response based on my training.
+    <button class="chat-launcher" id="chat-launcher" type="button" aria-label="Open support chat">
+        <span class="launcher-icon">AI</span>
+        <span class="launcher-text">Support</span>
+    </button>
+
+    <aside class="support-widget" id="support-widget" aria-label="StockAI support assistant">
+        <section class="widget-panel">
+            <div class="widget-header">
+                <div>
+                    <p class="widget-label">Support assistant</p>
+                    <div class="widget-brand-row">
+                        <h2>StockAI</h2>
+                        <div class="widget-status">
+                            <span class="status-dot" id="status-dot"></span>
+                            <span class="status-text" id="status-text">Connecting...</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="widget-close" id="toggle-widget" type="button" aria-label="Minimize chat">-</button>
+            </div>
+
+            <div class="widget-intro">
+                Ask about market trends, investment concepts, or portfolio strategy without leaving the page.
+            </div>
+
+            <div class="chat-scroll" id="chat-scroll">
+                <div id="chat-window">
+                    <div class="msg-row bot-row">
+                        <div class="avatar bot-avatar">AI</div>
+                        <div class="bubble bot-bubble">
+                            <div class="bubble-header">StockAI <span class="bubble-time" id="welcome-time"></span>
+                            </div>
+                            <div class="bubble-body">
+                                Hello. I am your stock support assistant.<br><br>
+                                I can help with <strong>market trends</strong>, <strong>portfolio ideas</strong>, and
+                                <strong>investment questions</strong>.
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
 
-    <!-- SUGGESTED PROMPTS -->
-    <div class="suggestions" id="suggestions">
-        <button class="suggest-btn" onclick="usePrompt('Stock prices rose')">Stock prices rose</button>
-        <button class="suggest-btn" onclick="usePrompt('The market today')">The market today</button>
-        <button class="suggest-btn" onclick="usePrompt('Investors are watching')">Investors are watching</button>
-        <button class="suggest-btn" onclick="usePrompt('Earnings season')">Earnings season</button>
-    </div>
+            <div class="suggestions" id="suggestions">
+                <button class="suggest-btn" onclick="usePrompt('What is an ETF?')">What is an ETF?</button>
+                <button class="suggest-btn" onclick="usePrompt('Explain market volatility')">Market volatility</button>
+                <button class="suggest-btn" onclick="usePrompt('How do dividends work?')">How dividends work</button>
+            </div>
 
-    <!-- INPUT BAR -->
-    <div class="input-bar">
-        <div class="input-wrap">
-            <textarea id="user-input" placeholder="Ask about stocks, markets, or your portfolio..." rows="1"
-                maxlength="200"></textarea>
-            <button id="send-btn" onclick="sendMessage()">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M2 8L14 8M14 8L9 3M14 8L9 13" stroke="currentColor" stroke-width="1.5"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-            </button>
-        </div>
-        <div class="input-meta">
-            <span id="char-count">0 / 200</span>
-            <span>Powered by TinyLLM — Phase 3 Transformer</span>
-        </div>
-    </div>
+            <div class="widget-tools">
+                <div class="temp-control">
+                    <span class="temp-label">Response style</span>
+                    <input type="range" id="temp-slider" min="1" max="20" value="10" title="Temperature">
+                    <span class="temp-val" id="temp-val">1.0</span>
+                </div>
+            </div>
+
+            <div class="input-bar">
+                <div class="input-wrap">
+                    <textarea id="user-input" placeholder="Ask your support question..." rows="1"
+                        maxlength="200"></textarea>
+                    <button id="send-btn" onclick="sendMessage()" type="button" aria-label="Send message">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M2 8L14 8M14 8L9 3M14 8L9 13" stroke="currentColor" stroke-width="1.5"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="input-meta">
+                    <span id="char-count">0 / 200</span>
+                    <span>TinyLLM support widget</span>
+                </div>
+            </div>
+        </section>
+    </aside>
 
     <script src="chat.js"></script>
 </body>

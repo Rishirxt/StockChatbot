@@ -1,14 +1,9 @@
-// ============================================
-// CHAT.JS — Browser-side JavaScript
-// Handles: sending messages, showing replies,
-//          typing indicators, server status
-// ============================================
+let isWaiting = false
+let isWidgetOpen = true
 
-// ── State
-let isWaiting = false   // prevent sending while waiting for reply
-
-// ── DOM references
+const body = document.body
 const chatWindow = document.getElementById('chat-window')
+const chatScroll = document.getElementById('chat-scroll')
 const input = document.getElementById('user-input')
 const sendBtn = document.getElementById('send-btn')
 const statusDot = document.getElementById('status-dot')
@@ -17,35 +12,26 @@ const charCount = document.getElementById('char-count')
 const tempSlider = document.getElementById('temp-slider')
 const tempVal = document.getElementById('temp-val')
 const suggestions = document.getElementById('suggestions')
+const launcher = document.getElementById('chat-launcher')
+const toggleWidgetBtn = document.getElementById('toggle-widget')
+const openChatBtn = document.getElementById('open-chat-btn')
 
-
-// ============================================
-// STARTUP
-// ============================================
 window.addEventListener('load', () => {
-    // Set welcome message timestamp
     document.getElementById('welcome-time').textContent = getTime()
-
-    // Check if servers are online
     checkHealth()
-
-    // Focus input
+    updateWidgetState(true)
     input.focus()
 })
 
-
-// ============================================
-// HEALTH CHECK — is the LLM server running?
-// ============================================
 async function checkHealth() {
     try {
         const res = await fetch('/health')
         const data = await res.json()
 
         if (data.llmServer && data.llmServer.status === 'ok') {
-            setStatus('online', 'LLM Online')
+            setStatus('online', 'AI online')
         } else {
-            setStatus('offline', 'LLM Offline — run python app.py')
+            setStatus('offline', 'LLM offline')
         }
     } catch {
         setStatus('offline', 'Server unreachable')
@@ -57,29 +43,20 @@ function setStatus(state, text) {
     statusText.textContent = text
 }
 
-
-// ============================================
-// SEND MESSAGE
-// ============================================
 async function sendMessage() {
     const text = input.value.trim()
     if (!text || isWaiting) return
 
-    // Hide suggestions after first message
     suggestions.style.display = 'none'
-
-    // Show user's message
     appendMessage('user', text)
     input.value = ''
     charCount.textContent = '0 / 200'
     autoResize()
 
-    // Show typing indicator
     const typingId = showTyping()
     setWaiting(true)
 
     try {
-        // Send to Node.js server
         const res = await fetch('/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -95,15 +72,14 @@ async function sendMessage() {
 
         if (res.ok) {
             appendMessage('bot', data.response)
-            setStatus('online', 'LLM Online')
+            setStatus('online', 'AI online')
         } else {
             appendError(data.error || 'Something went wrong.')
-            setStatus('offline', 'Error')
+            setStatus('offline', 'Reply failed')
         }
-
-    } catch (err) {
+    } catch {
         removeTyping(typingId)
-        appendError('Cannot reach the server. Is Node.js running?')
+        appendError('Cannot reach the server. Start the Node.js and Python servers first.')
         setStatus('offline', 'Disconnected')
     }
 
@@ -111,16 +87,11 @@ async function sendMessage() {
     input.focus()
 }
 
-
-// ============================================
-// APPEND MESSAGES TO CHAT
-// ============================================
 function appendMessage(role, text) {
     const isBot = role === 'bot'
     const row = document.createElement('div')
     row.className = `msg-row ${isBot ? 'bot-row' : 'user-row'}`
 
-    // Clean up text — trim leading/trailing whitespace and newlines
     const cleanText = text.replace(/^\s+/, '').replace(/\s+$/, '') || '...'
 
     row.innerHTML = `
@@ -151,10 +122,6 @@ function appendError(message) {
     scrollToBottom()
 }
 
-
-// ============================================
-// TYPING INDICATOR
-// ============================================
 function showTyping() {
     const id = 'typing-' + Date.now()
     const row = document.createElement('div')
@@ -180,10 +147,6 @@ function removeTyping(id) {
     if (el) el.remove()
 }
 
-
-// ============================================
-// UTILITY FUNCTIONS
-// ============================================
 function getTemperature() {
     return parseFloat(tempSlider.value) / 10
 }
@@ -196,8 +159,7 @@ function getTime() {
 }
 
 function scrollToBottom() {
-    const main = document.querySelector('main')
-    main.scrollTop = main.scrollHeight
+    chatScroll.scrollTop = chatScroll.scrollHeight
 }
 
 function setWaiting(state) {
@@ -221,18 +183,34 @@ function autoResize() {
 }
 
 function usePrompt(text) {
+    openWidget()
     input.value = text
     charCount.textContent = `${text.length} / 200`
     input.focus()
     autoResize()
 }
 
+function updateWidgetState(open) {
+    isWidgetOpen = open
+    body.classList.toggle('widget-open', open)
+    toggleWidgetBtn.setAttribute('aria-label', open ? 'Minimize chat' : 'Open chat')
 
-// ============================================
-// EVENT LISTENERS
-// ============================================
+    if (open) {
+        setTimeout(() => {
+            input.focus()
+            scrollToBottom()
+        }, 120)
+    }
+}
 
-// Send on Enter (Shift+Enter = new line)
+function openWidget() {
+    updateWidgetState(true)
+}
+
+function toggleWidget() {
+    updateWidgetState(!isWidgetOpen)
+}
+
 input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault()
@@ -240,16 +218,17 @@ input.addEventListener('keydown', (e) => {
     }
 })
 
-// Character count + auto-resize
 input.addEventListener('input', () => {
     charCount.textContent = `${input.value.length} / 200`
     autoResize()
 })
 
-// Temperature slider display
 tempSlider.addEventListener('input', () => {
     tempVal.textContent = (tempSlider.value / 10).toFixed(1)
 })
 
-// Periodically re-check server health
+launcher.addEventListener('click', openWidget)
+toggleWidgetBtn.addEventListener('click', toggleWidget)
+openChatBtn.addEventListener('click', openWidget)
+
 setInterval(checkHealth, 30000)
